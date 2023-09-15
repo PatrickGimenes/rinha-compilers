@@ -10,6 +10,7 @@ function interpreter(node) {
       return node.value;
 
     case "Tuple":
+      const tuple = [0, 0];
       return node.value;
 
     case "Print":
@@ -48,6 +49,8 @@ function interpreter(node) {
           return lhs && rhs;
         case "Or":
           return lhs || rhs;
+        default:
+          return console.log("Erro em op");
       }
 
     default:
