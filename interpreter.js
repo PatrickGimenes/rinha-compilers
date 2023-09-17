@@ -14,13 +14,13 @@ function interpreter(node, env) {
       return node.value;
 
     case "Print":
-      const term = interpreter(node.value);
+      const term = interpreter(node.value, env);
       console.log(term);
       break;
 
     case "Binary":
-      const lhs = interpreter(node.lhs);
-      const rhs = interpreter(node.rhs);
+      const lhs = interpreter(node.lhs, env);
+      const rhs = interpreter(node.rhs, env);
 
       switch (node.op) {
         case "Add":
@@ -54,11 +54,10 @@ function interpreter(node, env) {
       }
 
     case "Let":
-      env[node.name.text] = interpreter(node.value);
+      env[node.name.text] = interpreter(node.value, env);
       return interpreter(node.next, env);
     case "Var":
       return env[node.text];
-      break;
     default:
       console.log(`Term não encontrado ${node.kind}`);
   }
