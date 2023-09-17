@@ -1,4 +1,4 @@
-function interpreter(node) {
+function interpreter(node, env) {
   switch (node.kind) {
     case "Str":
       return node.value;
@@ -53,8 +53,14 @@ function interpreter(node) {
           return console.log("Erro em op");
       }
 
+    case "Let":
+      env[node.name.text] = interpreter(node.value);
+      return interpreter(node.next, env);
+    case "Var":
+      return env[node.text];
+      break;
     default:
-      console.log("Erro!");
+      console.log(`Term não encontrado ${node.kind}`);
   }
 }
 
