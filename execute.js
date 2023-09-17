@@ -1,9 +1,12 @@
 const fs = require("fs");
 const interpreter = require("./interpreter");
 
-const rawData = fs.readFileSync("./var/rinha/fib.json", "utf-8");
-const AST = JSON.parse(rawData);
-let env = {};
+function setup(filepath) {
+  const rawData = fs.readFileSync(filepath);
+  const AST = JSON.parse(rawData);
+  let env = {};
+  interpreter(AST.expression, env);
+}
 console.time("time");
-interpreter(AST.expression, env);
+setup("./var/rinha/source.rinha.json");
 console.timeEnd("time");

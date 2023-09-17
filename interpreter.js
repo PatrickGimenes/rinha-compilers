@@ -10,6 +10,13 @@ function interpreter(node, env) {
     return { call };
   };
   switch (node.kind) {
+    case "Let":
+      env[node.name.text] = interpreter(node.value, env);
+      return interpreter(node.next, env);
+
+    case "Var":
+      return env[node.text];
+
     case "Str":
       return node.value;
 
@@ -31,6 +38,7 @@ function interpreter(node, env) {
 
     case "Second":
       return interpreter(node.value, env)[1];
+
     case "Print":
       const term = interpreter(node.value, env);
       console.log(term);
@@ -59,7 +67,11 @@ function interpreter(node, env) {
 
       switch (node.op) {
         case "Add":
-          return lhs + rhs;
+          if (node.lhs.kind === "Str" || node.lhs.kind === "Str") {
+            return `${lhs}${rhs}`;
+          } else {
+            return lhs + rhs;
+          }
         case "Sub":
           return lhs - rhs;
         case "Mul":
@@ -88,11 +100,6 @@ function interpreter(node, env) {
           return console.log("Erro em op");
       }
 
-    case "Let":
-      env[node.name.text] = interpreter(node.value, env);
-      return interpreter(node.next, env);
-    case "Var":
-      return env[node.text];
     default:
       console.log(`Term ${node.kind} não encontrado!`);
   }
