@@ -1,4 +1,14 @@
 function interpreter(node, env) {
+  const clojure = (fn, env) => {
+    const call = (args) => {
+      const newEnv = { ...env };
+      for (let i = 0; i < fn.parameters.length; i++) {
+        newEnv[fn.parameters[i].text] = args[i];
+      }
+      return interpreter(fn.value, newEnv);
+    };
+    return { call };
+  };
   switch (node.kind) {
     case "Str":
       return node.value;
@@ -25,6 +35,23 @@ function interpreter(node, env) {
       const term = interpreter(node.value, env);
       console.log(term);
       break;
+
+    case "If":
+      if (interpreter(node.condition, env) === true) {
+        return interpreter(node.then, env);
+      } else {
+        return interpreter(node.otherwise, env);
+      }
+
+    case "Function":
+      return node;
+
+    case "Call":
+      const callee = interpreter(node.callee, env);
+      if (callee?.kind === "Function")
+        return clojure(callee, env).call(
+          node.arguments.map((arg) => interpreter(arg, env))
+        );
 
     case "Binary":
       const lhs = interpreter(node.lhs, env);
