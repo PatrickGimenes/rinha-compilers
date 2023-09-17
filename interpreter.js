@@ -10,9 +10,17 @@ function interpreter(node, env) {
       return node.value;
 
     case "Tuple":
-      const tuple = [0, 0];
-      return node.value;
+      const tuple = [
+        interpreter(node.first, env),
+        interpreter(node.second, env),
+      ];
+      return tuple;
 
+    case "First":
+      return interpreter(node.value, env)[0];
+
+    case "Second":
+      return interpreter(node.value, env)[1];
     case "Print":
       const term = interpreter(node.value, env);
       console.log(term);
@@ -59,7 +67,7 @@ function interpreter(node, env) {
     case "Var":
       return env[node.text];
     default:
-      console.log(`Term não encontrado ${node.kind}`);
+      console.log(`Term ${node.kind} não encontrado!`);
   }
 }
 

@@ -1,7 +1,7 @@
 const fs = require("fs");
 const interpreter = require("./interpreter");
 
-const rawData = fs.readFileSync("./var/rinha/var.json", "utf-8");
+const rawData = fs.readFileSync("./var/rinha/tuple.json", "utf-8");
 const AST = JSON.parse(rawData);
 let env = {};
 console.time("time");
