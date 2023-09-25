@@ -7,6 +7,5 @@ function setup(filepath) {
   let env = {};
   interpreter(AST.expression, env);
 }
-console.time("time");
+
 setup("./var/rinha/source.rinha.json");
-console.timeEnd("time");
